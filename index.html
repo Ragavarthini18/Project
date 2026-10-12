@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CyberSecure File Encryption</title>
+
+<style>
+body {
+    background: #0b1120;
+    font-family: 'Segoe UI', sans-serif;
+    color: #e5e7eb;
+    text-align: center;
+}
+
+.container {
+    width: 75%;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    color: #00f2ff;
+    letter-spacing: 2px;
+}
+
+.limit {
+    color: #f87171;
+    font-size: 14px;
+}
+
+.tabs button {
+    padding: 12px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #111827;
+    color: #00f2ff;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.tabs button:hover {
+    background: #00f2ff;
+    color: black;
+}
+
+.section {
+    display: none;
+    margin-top: 25px;
+    padding: 25px;
+    background: #111827;
+    border-radius: 10px;
+}
+
+textarea {
+    width: 95%;
+    height: 180px;
+    background: #0b1120;
+    color: #00ff9d;
+    border: 1px solid #00f2ff;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+button.action {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #00f2ff;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button.clear-btn {
+    background: #ef4444;
+    color: white;
+}
+
+button.action:hover {
+    background: #0ea5e9;
+}
+
+button.clear-btn:hover {
+    background: #dc2626;
+}
+
+input[type="file"] {
+    margin: 15px;
+    color: white;
+}
+
+.footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: gray;
+}
+</style>
+
+<script>
+function showTab(tab) {
+    document.getElementById("encrypt").style.display = "none";
+    document.getElementById("decrypt").style.display = "none";
+    document.getElementById(tab).style.display = "block";
+}
+
+function copyCode() {
+    let text = document.getElementById("code");
+    text.select();
+    document.execCommand("copy");
+    alert("Secret Code Copied!");
+}
+
+function clearEncryption() {
+    document.getElementById("code").value = "";
+}
+
+function clearDecryption() {
+    document.getElementById("decryptBox").value = "";
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>CYBERSECURE ENCRYPTION PORTAL</h1>
+<p class="limit">Upload Limit: Maximum 1MB (Image, PDF, Text)</p>
+
+<div class="tabs">
+    <button onclick="showTab('encrypt')">Encryption</button>
+    <button onclick="showTab('decrypt')">Decryption</button>
+</div>
+
+<!-- ENCRYPT -->
+<div id="encrypt" class="section">
+
+<h2>Encrypt File</h2>
+
+<form action="/encrypt" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <br>
+    <button class="action" type="submit">Generate Secure Code</button>
+</form>
+
+{% if secret_code %}
+<h3>Encrypted Secure Code:</h3>
+<textarea id="code" readonly>{{ secret_code }}</textarea>
+<br>
+<button class="action" onclick="copyCode()">Copy</button>
+<button class="action clear-btn" onclick="clearEncryption()">Clear</button>
+{% endif %}
+
+</div>
+
+<!-- DECRYPT -->
+<div id="decrypt" class="section">
+
+<h2>Decrypt Secure Code</h2>
+
+<form action="/decrypt" method="POST">
+    <textarea id="decryptBox" name="secret" placeholder="Paste Secure Code Here" required></textarea>
+    <br>
+    <button class="action" type="submit">Restore Original File</button>
+    <button type="button" class="action clear-btn" onclick="clearDecryption()">Clear</button>
+</form>
+
+</div>
+
+<div class="footer">
+End-to-End Encryption • AES 256-bit • Secure Transmission
+</div>
+
+</div>
+
+<script>
+showTab('encrypt');
+</script>
+
+</body>
+</html>
